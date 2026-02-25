@@ -46,11 +46,13 @@ void twoDimensionalArrays() {
     //   Each int* in that array points to a row of ints.
     //   So you follow two pointers to reach a value — see the diagram above.
 
-    // ? SEE DIAGRAM: images/two_d_spine.png — what the spine allocation looks like
+    // ? SEE DIAGRAM (check the svg): images/two_d_spine.png — what the spine allocation looks like
     //
     // TODO: Allocate an array of int* pointers with 'rows' elements
     //       Store it in int** called 'table'
     //       Hint: int** table = new int*[rows];
+    
+	int** table = new int* [rows];
     //
     // ! DISCUSSION: What does new int*[rows] allocate?
     //   It allocates an array of 'rows' pointers on the heap.
@@ -58,7 +60,11 @@ void twoDimensionalArrays() {
     //   We need a second step to allocate each row.
 
     // TODO: Use a for loop to allocate each row: table[i] = new int[cols];
-    //
+    for (int i = 0; i < rows; ++i)
+    {
+        table[i] = new int[cols];
+    }
+    
     // ? SEE DIAGRAM: images/two_d_rows.png — full picture after loop + delete order + flat alternative
     //
     // ! DISCUSSION: Why two separate allocations?
@@ -70,6 +76,13 @@ void twoDimensionalArrays() {
 
     // TODO: Fill the table with values where table[r][c] = (r * cols) + c + 1
     //       This gives us: row 0 = {1,2,3,4}, row 1 = {5,6,7,8}, row 2 = {9,10,11,12}
+    for (int r = 0; r < rows; ++r)
+    {
+        for (int c = 0; c < cols; ++c)
+        {
+            table[r][c] = (r * cols) + c + 1;
+        }
+	}
 
     // TODO: Print the 2D array using nested for loops
     // Expected output:
@@ -80,11 +93,25 @@ void twoDimensionalArrays() {
     std::cout << "Dynamic 2D array:" << '\n';
 
     // your nested loops here
+    for (int r = 0; r < rows; ++r)
+    {
+        std::cout << "  Row " << r << ": ";
+        for (int c = 0; c < cols; ++c)
+        {
+            std::cout << table[r][c] << " ";
+        }
+        std::cout << '\n';
+	}
 
     // --- 3. Freeing a dynamic 2D array ---
     std::cout << "\n--- 3. Freeing a Dynamic 2D Array ---" << '\n';
 
     // TODO: Use a for loop to delete[] each row first
+    for (int i = 0; i < rows; ++i)
+    {
+        delete[] table[i];
+	}
+    
     //
     // ! DISCUSSION: Why delete rows before the spine?
     //   If we delete the spine (table) first, we lose the pointers to
@@ -95,6 +122,8 @@ void twoDimensionalArrays() {
 
     // TODO: Delete the spine (the array of pointers) with delete[] table
     // TODO: Set table to nullptr
+	delete[] table;
+	table = nullptr;
 
     std::cout << "2D array memory freed (rows first, then spine)" << '\n';
 
@@ -113,9 +142,17 @@ void twoDimensionalArrays() {
     // TODO: Allocate a single flat array of size rows * cols
     //       Store it in int* called 'flat'
     //       Hint: int* flat = new int[rows * cols];
+	int* flat = new int[rows * cols];
 
     // TODO: Fill it using flat[r * cols + c] = (r * cols) + c + 1
     //       Same values as before: 1 through 12
+    for (int r = 0; r < rows; ++r)
+    {
+        for (int c = 0; c < cols; ++c)
+        {
+            flat[r * cols + c] = (r * cols) + c + 1;
+        }
+    }
 
     // TODO: Print the flat array as a 2D grid using the index formula
     // Expected output:
@@ -126,8 +163,19 @@ void twoDimensionalArrays() {
     std::cout << "Flat array as 2D:" << '\n';
 
     // your nested loops here
+    for (int r = 0; r < rows; ++r)
+    {
+        std::cout << "  Row " << r << ": ";
+        for (int c = 0; c < cols; ++c)
+        {
+            std::cout << flat[r * cols + c] << " ";
+        }
+        std::cout << '\n';
+    }
 
     // TODO: Free the flat array with delete[] and set to nullptr
+	delete[] flat;
+	flat = nullptr;
 
     std::cout << "Flat array freed (just one delete[]!)" << '\n';
 
